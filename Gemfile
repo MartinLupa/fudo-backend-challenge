@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 ruby '3.4.5'
 
 gem 'dotenv'
+gem 'json-schema'
 gem 'puma'
 gem 'rack'
 gem 'rackup'
