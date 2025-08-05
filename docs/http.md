@@ -1,0 +1,2 @@
+# Que es HTTP (HyperText Transfer Protocol)?
+Es un protocolo que permite la conectividad entre servicios para el intercambio de recursos a traves de internet. Es state-less, opera en la capa 7 del modelo OSI(Application Layer) en un esquema de peticion-respuesta entre cliente y servidor.

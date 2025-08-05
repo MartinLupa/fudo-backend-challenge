@@ -1,0 +1,2 @@
+# Que es TCP (Transfer Control Protocol)?
+Es un protocolo de comunicacion dentro de la suite de protocolos HTTP. Opera en el nivel 4 del modelo OSI(Transport Layer). A traves de un TCP handshake establece una conexion entre diferentes servicios. Ofrece garantias de envio, y retransmision de paquetes perdidos.
