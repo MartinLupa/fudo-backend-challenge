@@ -5,9 +5,6 @@ unless DB.table_exists?(:users)
     primary_key :id
     String :username, unique: true, null: false
     String :password, null: false
-    String :session_token
-    DateTime :session_valid_until
-    DateTime :last_login, default: Sequel::CURRENT_TIMESTAMP
   end
 end
 

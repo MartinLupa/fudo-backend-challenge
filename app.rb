@@ -4,6 +4,7 @@ require 'rack/response'
 
 require './config/database'
 require './models/user'
+require './models/session'
 require './schemas/user'
 require './services/auth_service'
 
@@ -52,7 +53,7 @@ class FudoAPI
     username = body['username']
     password = body['password']
 
-    token = @auth_service.authenticate(username, password)
+    token = @auth_service.login(username, password)
 
     if token
       [200, json_headers, [JSON.generate({ token: token[:value], expires_at: token[:expires_at] })]]

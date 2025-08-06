@@ -1,18 +1,14 @@
 require 'securerandom'
 
 class AuthService
-  def authenticate(username, password)
+  def login(username, password)
     user = User.find(username: username)
 
     return nil unless user && validate_password(user.password, password)
 
     token = generate_token
 
-    user.update(
-      session_token: token[:value],
-      session_valid_until: token[:expires_at],
-      last_login: Time.now
-    )
+    Session.create(session_token: token[:value], username: username, expires_at: token[:expires_at])
 
     token
   end
@@ -27,5 +23,8 @@ class AuthService
 
   def validate_password(db_password, login_password)
     db_password == hash_password(login_password)
+  end
+
+  def validate_session
   end
 end
