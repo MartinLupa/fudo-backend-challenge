@@ -25,6 +25,10 @@ class AuthService
     db_password == hash_password(login_password)
   end
 
-  def validate_session
+  def validate_session(token)
+    session = Session.find(session_token: token)
+    return nil if session.nil? || session[:expires_at] <= Time.now
+
+    session
   end
 end

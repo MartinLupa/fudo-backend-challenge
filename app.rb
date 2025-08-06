@@ -7,6 +7,7 @@ require './models/user'
 require './models/session'
 require './models/product'
 require './schemas/user'
+require './schemas/product'
 require './services/auth_service'
 
 class FudoAPI
@@ -22,7 +23,8 @@ class FudoAPI
     when ['POST', '/login']
       login(request)
     when ['POST', '/products']
-      [202, json_headers, [JSON.generate({ data: 'Product creation accepted.', error: nil })]]
+      create_product(request)
+      # [202, json_headers, [JSON.generate({ data: 'Product creation accepted.', error: nil })]]
     when ['GET', '/products/:id']
       [200, json_headers, [JSON.generate({ data: 'Product with :id.', error: nil })]]
     when ['PATCH', '/products/:id']
@@ -48,7 +50,7 @@ class FudoAPI
     begin
       JSON::Validator.validate!(Schemas::LOGIN_ATTEMPT, body)
     rescue JSON::Schema::ValidationError => e
-      return [400, json_headers, [JSON.generate({ data: nil, error: e.message })]]
+      return [400, json_headers, [JSON.generate({ error: e.message })]]
     end
 
     username = body['username']
@@ -59,12 +61,29 @@ class FudoAPI
     if token
       [200, json_headers, [JSON.generate({ token: token[:value], expires_at: token[:expires_at] })]]
     else
-      [401, json_headers, [JSON.generate({ error: 'Invalid credentials' })]]
+      [401, json_headers, [JSON.generate({ error: 'invalid credentials' })]]
     end
   end
 
-  def create_product
+  def create_product(request)
+    session = @auth_service.validate_session(request.get_header('HTTP_AUTHORIZATION'))
+    return [419, json_headers, [JSON.generate({ error: 'Session token is expired or invalid' })]] unless session
+
     body = JSON.parse(request.body.read)
+
+    # Validate body
+    begin
+      JSON::Validator.validate!(Schemas::CREATE_PRODUCT, body)
+    rescue JSON::Schema::ValidationError => e
+      return [400, json_headers, [JSON.generate({ error: e.message })]]
+    end
+
+    product_name = body['name']
+
+    # TODO: create asynchronously
+    Product.create(name: product_name)
+
+    [202, json_headers, [JSON.generate({ message: "#{product_name} creation started successfully." })]]
   end
 
   def find_product_by_id
@@ -80,6 +99,6 @@ class FudoAPI
   end
 
   def not_found
-    [404, json_headers, [JSON.generate({ data: nil, error: 'Not found' })]]
+    [404, json_headers, [JSON.generate({ error: '404 - not found' })]]
   end
 end
