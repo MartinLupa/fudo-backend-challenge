@@ -2,23 +2,30 @@ require 'securerandom'
 
 class AuthService
   def authenticate(username, password)
-    puts 'Authenticating user'
+    user = User.find(username: username)
 
-    # Get the user from the DB
+    return nil unless user && validate_password(user.password, password)
 
-    # Check that the password hash in the DB matches the password hash in the incoming payload
-
-    # If it doesnt match return token nil
-
-    # If it matches return new token and refresh token in db
     token = generate_token
+
+    user.update(
+      session_token: token[:value],
+      session_valid_until: token[:expires_at],
+      last_login: Time.now
+    )
+
+    token
   end
 
   def generate_token
-    SecureRandom.hex(64)
+    { value: SecureRandom.hex(64), expires_at: Time.now + 3600 }
   end
 
   def hash_password(password)
     Digest::SHA256.hexdigest("#{password}@fudo_salt")
+  end
+
+  def validate_password(db_password, login_password)
+    db_password == hash_password(login_password)
   end
 end

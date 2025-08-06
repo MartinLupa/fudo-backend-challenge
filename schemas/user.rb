@@ -5,7 +5,7 @@ module Schemas
     properties: {
       username: {
         type: 'string',
-        minLength: 8
+        minLength: 3
       },
       password: {
         type: 'string',

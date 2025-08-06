@@ -40,7 +40,7 @@ class FudoAPI
 
   # --------- Route handlers ---------
   def login(request)
-    body = request.body.read
+    body = JSON.parse(request.body.read)
 
     # Validate body
     begin
@@ -55,7 +55,7 @@ class FudoAPI
     token = @auth_service.authenticate(username, password)
 
     if token
-      [200, json_headers, [JSON.generate({ token: token, expires_in: 3600 })]]
+      [200, json_headers, [JSON.generate({ token: token[:value], expires_at: token[:expires_at] })]]
     else
       [401, json_headers, [JSON.generate({ error: 'Invalid credentials' })]]
     end
