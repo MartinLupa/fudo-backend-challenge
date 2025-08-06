@@ -1,6 +1,7 @@
 require 'sequel'
 require 'retriable'
 require 'dotenv/load'
+require 'sequel/extensions/seed'
 
 database_url = ENV['DATABASE_URL']
 raise '[Missing environment variable] DATABASE_URL' if database_url.nil? || database_url.empty?
@@ -18,4 +19,11 @@ rescue Sequel::DatabaseConnectionError => e
   puts "❌ Database connection failed: #{e.message}"
   puts "Database URL: #{database_url}"
   raise e
+end
+
+# Apply initial seeds if development
+if ENV['RACK_ENV'] == 'development'
+  Sequel::Seed.setup(:development)
+  Sequel.extension :seed
+  Sequel::Seeder.apply(DB, './db/seed')
 end
