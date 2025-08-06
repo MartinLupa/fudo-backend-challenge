@@ -33,9 +33,9 @@ class FudoAPI
     when ['DELETE', '/products/1']
       delete_product(request)
     when ['GET', '/openapi']
-      [200, json_headers, [JSON.generate({ data: 'OpenAPI spec file.', error: nil })]]
+      retrieve_openapi_spec
     when ['GET', '/authors']
-      [200, json_headers, [JSON.generate({ data: 'Authors file.', error: nil })]]
+      retrieve_authors
     else
       not_found
     end
@@ -142,10 +142,14 @@ class FudoAPI
     [200, json_headers, [JSON.generate({ message: "product with id: #{product_id} deleted successfully." })]]
   end
 
-  def openapi_spec
+  def retrieve_openapi_spec
+    openapi_spec_content = File.read('openapi.yaml')
+    [200, json_headers, [JSON.generate({ openapi_spec: openapi_spec_content })]]
   end
 
-  def list_authors
+  def retrieve_authors
+    authors_content = File.read('AUTHORS')
+    [200, json_headers, [JSON.generate({ authors: authors_content })]]
   end
 
   def not_found
