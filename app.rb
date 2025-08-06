@@ -2,6 +2,8 @@ require 'json'
 require 'json-schema'
 require 'rack/response'
 
+require './config/database'
+require './models/user'
 require './schemas/user'
 require './services/auth_service'
 

@@ -9,6 +9,8 @@ gem 'json-schema'
 gem 'puma'
 gem 'rack'
 gem 'rackup'
+gem 'retriable'
+gem 'sequel'
 
 group :development do
   gem 'rerun'

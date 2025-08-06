@@ -6,7 +6,7 @@ class AuthService
 
     # Get the user from the DB
 
-    # Check that the password ash in the DB matches the password hash in the incoming payload
+    # Check that the password hash in the DB matches the password hash in the incoming payload
 
     # If it doesnt match return token nil
 

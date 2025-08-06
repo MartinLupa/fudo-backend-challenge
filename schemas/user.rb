@@ -11,6 +11,7 @@ module Schemas
         type: 'string',
         minimum: 8,
         maximum: 64
+        # Add further server-side password requirements through regex.
       }
     },
     additionalProperties: false
