@@ -28,6 +28,7 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.0)
+    rack-routing (0.0.11)
     rackup (2.2.1)
       rack (>= 3)
     rainbow (3.1.1)
@@ -68,6 +69,7 @@ DEPENDENCIES
   json-schema
   puma
   rack
+  rack-routing
   rackup
   rerun
   retriable

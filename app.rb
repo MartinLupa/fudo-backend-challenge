@@ -24,11 +24,14 @@ class FudoAPI
       login(request)
     when ['POST', '/products']
       create_product(request)
-      # [202, json_headers, [JSON.generate({ data: 'Product creation accepted.', error: nil })]]
-    when ['GET', '/products/:id']
-      [200, json_headers, [JSON.generate({ data: 'Product with :id.', error: nil })]]
-    when ['PATCH', '/products/:id']
-      [200, json_headers, [JSON.generate({ data: 'Product with :id update successful.', error: nil })]]
+    when ['GET', '/products']
+      retrieve_all_products(request)
+    when ['GET', '/products/1']
+      retrieve_product_by_id(request)
+    when ['PATCH', '/products/1']
+      update_product(request)
+    when ['DELETE', '/products/1']
+      delete_product(request)
     when ['GET', '/openapi']
       [200, json_headers, [JSON.generate({ data: 'OpenAPI spec file.', error: nil })]]
     when ['GET', '/authors']
@@ -67,7 +70,7 @@ class FudoAPI
 
   def create_product(request)
     session = @auth_service.validate_session(request.get_header('HTTP_AUTHORIZATION'))
-    return [419, json_headers, [JSON.generate({ error: 'Session token is expired or invalid' })]] unless session
+    return [419, json_headers, [JSON.generate({ error: 'session token is expired or invalid' })]] unless session
 
     body = JSON.parse(request.body.read)
 
@@ -86,10 +89,57 @@ class FudoAPI
     [202, json_headers, [JSON.generate({ message: "#{product_name} creation started successfully." })]]
   end
 
-  def find_product_by_id
+  def retrieve_all_products(request)
+    session = @auth_service.validate_session(request.get_header('HTTP_AUTHORIZATION'))
+    return [419, json_headers, [JSON.generate({ error: 'session token is expired or invalid' })]] unless session
+
+    products = Product.all
+
+    [200, json_headers, [JSON.generate({ products: products })]]
   end
 
-  def update_product
+  def retrieve_product_by_id(request)
+    session = @auth_service.validate_session(request.get_header('HTTP_AUTHORIZATION'))
+    return [419, json_headers, [JSON.generate({ error: 'session token is expired or invalid' })]] unless session
+
+    id = 1
+
+    product = Product.find(id: id)
+
+    [200, json_headers, [JSON.generate({ product: product })]]
+  end
+
+  def update_product(request)
+    session = @auth_service.validate_session(request.get_header('HTTP_AUTHORIZATION'))
+    [419, json_headers, [JSON.generate({ error: 'session token is expired or invalid' })]] unless session
+
+    body = JSON.parse(request.body.read)
+
+    # Validate body
+    begin
+      JSON::Validator.validate!(Schemas::UPDATE_PRODUCT, body)
+    rescue JSON::Schema::ValidationError => e
+      return [400, json_headers, [JSON.generate({ error: e.message })]]
+    end
+
+    product_id = 1
+    product_name = body['name']
+
+    product = Product.where({ id: product_id }).first
+    product.update(name: product_name)
+
+    [200, json_headers, [JSON.generate({ message: 'product name updated successfully.' })]]
+  end
+
+  def delete_product(request)
+    session = @auth_service.validate_session(request.get_header('HTTP_AUTHORIZATION'))
+    [419, json_headers, [JSON.generate({ error: 'session token is expired or invalid' })]] unless session
+
+    product_id = 1
+
+    Product[product_id].delete
+
+    [200, json_headers, [JSON.generate({ message: "product with id: #{product_id} deleted successfully." })]]
   end
 
   def openapi_spec

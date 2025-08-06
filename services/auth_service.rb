@@ -12,7 +12,6 @@ class AuthService
                              session_token: token[:value],
                              username: username,
                              expires_at: token[:expires_at])
-
     token
   end
 
@@ -29,7 +28,10 @@ class AuthService
   end
 
   def validate_session(token)
+    return nil if token.nil?
+
     session = Session.find(session_token: token)
+
     return nil if session.nil? || session[:expires_at] <= Time.now
 
     session
