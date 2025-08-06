@@ -5,6 +5,7 @@ require 'rack/response'
 require './config/database'
 require './models/user'
 require './models/session'
+require './models/product'
 require './schemas/user'
 require './services/auth_service'
 
@@ -63,6 +64,7 @@ class FudoAPI
   end
 
   def create_product
+    body = JSON.parse(request.body.read)
   end
 
   def find_product_by_id

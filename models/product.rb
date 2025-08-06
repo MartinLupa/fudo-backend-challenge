@@ -1,0 +1,17 @@
+require 'sequel'
+
+unless DB.table_exists?(:products)
+  DB.create_table :products do
+    primary_key :id
+    String :name, unique: true, null: false
+  end
+end
+
+class Product < Sequel::Model
+  plugin :json_serializer
+  plugin :validation_helpers
+  def validate
+    super
+    validates_presence %i[name]
+  end
+end
