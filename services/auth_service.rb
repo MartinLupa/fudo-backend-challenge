@@ -8,7 +8,10 @@ class AuthService
 
     token = generate_token
 
-    Session.create(session_token: token[:value], username: username, expires_at: token[:expires_at])
+    Session.update_or_create({ username: username },
+                             session_token: token[:value],
+                             username: username,
+                             expires_at: token[:expires_at])
 
     token
   end

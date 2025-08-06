@@ -21,6 +21,9 @@ rescue Sequel::DatabaseConnectionError => e
   raise e
 end
 
+# Enable update_or_create method
+Sequel::Model.plugin :update_or_create
+
 # Apply initial seeds if development
 if ENV['RACK_ENV'] == 'development'
   Sequel::Seed.setup(:development)
