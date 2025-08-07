@@ -28,6 +28,8 @@ GEM
     parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
+    pg (1.6.1)
+    pg (1.6.1-arm64-darwin)
     prism (1.4.0)
     public_suffix (6.0.2)
     puma (6.6.1)
@@ -66,6 +68,8 @@ GEM
     ruby-progressbar (1.13.0)
     sequel (5.95.1)
       bigdecimal
+    sequel-seed (1.1.2)
+      sequel (>= 4.49.0)
     sidekiq (8.0.6)
       connection_pool (>= 2.5.0)
       json (>= 2.9.0)
@@ -84,6 +88,7 @@ DEPENDENCIES
   cuba
   dotenv
   json-schema
+  pg
   puma
   rack
   rackup
@@ -91,6 +96,7 @@ DEPENDENCIES
   retriable
   rubocop
   sequel
+  sequel-seed
   sidekiq
 
 RUBY VERSION

@@ -1,4 +1,5 @@
 require 'sequel'
+require './config/database'
 
 unless DB.table_exists?(:products)
   DB.create_table :products do

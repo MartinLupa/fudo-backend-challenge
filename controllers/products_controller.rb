@@ -40,9 +40,9 @@ class ProductsController
 
     product_name = payload['name']
 
-    # ProductProcessorWorker.perform_async(product_name)
+    ProductProcessorWorker.perform_in(5, product_name)
 
     res.status = 202
-    res.json({ message: "#{product_name} creation started successfully." })
+    res.json({ message: "#{product_name} creation will start in 5 seconds." })
   end
 end
