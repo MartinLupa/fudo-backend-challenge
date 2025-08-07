@@ -1,4 +1,4 @@
-def retrieve_authors
+def handle_authors
   authors_content = File.read('AUTHORS')
 
   res.status = 200

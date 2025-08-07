@@ -12,6 +12,7 @@ gem 'rack'
 gem 'rackup'
 gem 'retriable'
 gem 'sequel'
+gem 'sidekiq'
 
 group :development do
   gem 'rerun'

@@ -1,5 +1,3 @@
-require './services/auth_service'
-
 def handle_login(req, res, auth_service)
   payload = JSON.parse(req.body.read)
 

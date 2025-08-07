@@ -1,4 +1,4 @@
-def retrieve_openapi_spec
+def handle_openapi
   openapi_spec_content = File.read('openapi.yaml')
 
   res.status = 200

@@ -6,16 +6,13 @@ require './config/database'
 require './models/user'
 require './models/session'
 require './models/product'
+require './routes/login/handle_login'
+require './routes/authors/handle_authors'
+require './routes/openapi/handle_openapi'
 require './schemas/user'
 require './schemas/product'
 require './services/auth_service'
-
-require './routes/login/handle_login'
-require './routes/products/retrieve_all_products'
-require './routes/products/retrieve_product_by_id'
-require './routes/products/create_product'
-require './routes/authors/retrieve_authors'
-require './routes/openapi/retrieve_openapi_spec'
+require './controllers/products_controller'
 
 # Initialize services
 auth_service = AuthService.new
@@ -27,31 +24,31 @@ Cuba.define do
     end
   end
 
-  on 'products' do
-    on root, get do
-      retrieve_all_products
-    end
-
-    on ':id' do |id|
-      on get do
-        retrieve_product_by_id(id, res)
-      end
-    end
-
-    on post do
-      create_product(req, res)
-    end
-  end
-
   on 'openapi' do
     on get do
-      retrieve_openapi_spec
+      handle_openapi
     end
   end
 
   on 'authors' do
     on get do
-      retrieve_authors
+      handle_authors
+    end
+  end
+
+  on 'products' do
+    on root, get do
+      ProductController.get_all_products
+    end
+
+    on ':id' do |id|
+      on get do
+        ProductController.get_product_by_id(id, res)
+      end
+    end
+
+    on post do
+      ProductController.create_product_async(req, res)
     end
   end
 end
