@@ -40,6 +40,14 @@ class ProductsController
 
     product_name = payload['name']
 
+    existing_product = Product.find(name: product_name)
+
+    if existing_product
+      res.status = 409
+      res.json({ error: "a product with name ##{product_name} already exists." })
+      return
+    end
+
     ProductProcessorWorker.perform_in(5, product_name)
 
     res.status = 202
