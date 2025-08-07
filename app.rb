@@ -25,18 +25,25 @@ Cuba.define do
   end
 
   on 'products' do
-    on root, get do
-      ProductsController.get_all(res)
-    end
+    valid_session = auth_service.validate_session(req.get_header('HTTP_AUTHORIZATION'))
 
-    on ':id' do |id|
-      on get do
-        ProductsController.get_by_id(id, res)
+    if valid_session
+      on root, get do
+        ProductsController.get_all(res)
       end
-    end
 
-    on post do
-      ProductsController.create_async(req, res)
+      on ':id' do |id|
+        on get do
+          ProductsController.get_by_id(id, res)
+        end
+      end
+
+      on post do
+        ProductsController.create_async(req, res)
+      end
+    else
+      res.status = 401
+      res.json({ message: '[Authorization header] invalid or expired token' })
     end
   end
 end

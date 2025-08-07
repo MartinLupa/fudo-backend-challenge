@@ -5,8 +5,6 @@ require 'rackup'
 require 'rack/builder'
 require 'dotenv/load'
 
-require './middlewares/session_validator'
-
 require './app'
 
 app = Rack::Builder.new do
@@ -19,6 +17,7 @@ app = Rack::Builder.new do
       ['/openapi.yaml', { 'cache-control' => 'no-cache, must-revalidate' }]
     ]
   }
+  # use Rack::Auth::Basic 'user', 'password'
   run Cuba
 end
 
