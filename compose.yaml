@@ -1,4 +1,16 @@
 services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    environment:
+      API_GATEWAY_PORT: ${API_GATEWAY_PORT}
+      RATE_LIMIT_REQUESTS_PER_SECOND: ${RATE_LIMIT_REQUESTS_PER_SECOND}
+      UPSTREAM_SERVER_PORT: ${SERVER_PORT}
+    restart: always
+    ports:
+      - ${API_GATEWAY_PORT}:80
+      
   db:
     image: postgres:15
     environment:
