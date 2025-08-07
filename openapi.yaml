@@ -1,0 +1,303 @@
+openapi: 3.0.3
+info:
+  title: Cuba Products API
+  description: A Ruby Cuba-based API for managing products with authentication
+  version: 1.0.0
+  contact:
+    name: API Support
+servers:
+  - url: http://localhost:9292
+    description: Development server
+  - url: https://api.example.com
+    description: Production server
+
+paths:
+  /login:
+    post:
+      summary: User authentication
+      description: Authenticate a user and receive an access token
+      operationId: loginUser
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  description: User's username
+                  example: "john_doe"
+                password:
+                  type: string
+                  format: password
+                  description: User's password
+                  example: "secure_password123"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Authentication token
+                    example: "a1b2c3d4e5f6..."
+                  expires_at:
+                    type: string
+                    format: date-time
+                    description: Token expiration timestamp
+                    example: "2024-01-15T14:30:00Z"
+        '400':
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "The property '#/username' of type null did not match the following type: string"
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "invalid credentials"
+
+  /products:
+    get:
+      summary: Get all products
+      description: Retrieve a list of all products
+      operationId: getAllProducts
+      tags:
+        - Products
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of products retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    oneOf:
+                      - type: string
+                        example: "no products found"
+                      - type: array
+                        items:
+                          $ref: '#/components/schemas/ProductSummary'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    post:
+      summary: Create a new product (async)
+      description: Create a new product asynchronously. The product creation will be processed in the background.
+      operationId: createProduct
+      tags:
+        - Products
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Product name
+                  example: "Wireless Headphones"
+      responses:
+        '202':
+          description: Product creation accepted and will be processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Wireless Headphones creation will start in 5 seconds."
+        '400':
+          description: Invalid request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /products/{id}:
+    get:
+      summary: Get product by ID
+      description: Retrieve a specific product by its ID
+      operationId: getProductById
+      tags:
+        - Products
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: integer
+            example: 123
+      responses:
+        '200':
+          description: Product retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "product with id# 123 not found"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /authors:
+    get:
+      summary: Get authors information
+      description: Retrieve authors information from the AUTHORS file
+      operationId: getAuthors
+      tags:
+        - Information
+      responses:
+        '200':
+          description: Authors information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  authors:
+                    type: string
+                    description: Content of the AUTHORS file
+                    example: "John Doe <john@example.com>\nJane Smith <jane@example.com>"
+
+  /openapi:
+    get:
+      summary: Get OpenAPI specification
+      description: Retrieve the OpenAPI specification for this API
+      operationId: getOpenApiSpec
+      tags:
+        - Information
+      responses:
+        '200':
+          description: OpenAPI specification retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  openapi_spec:
+                    type: string
+                    description: Content of the openapi.yaml file
+                    example: "openapi: 3.0.3\ninfo:\n  title: Cuba Products API..."
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Authentication token obtained from the /login endpoint
+
+  schemas:
+    ProductSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Product ID
+          example: 123
+        name:
+          type: string
+          description: Product name
+          example: "Wireless Headphones"
+      required:
+        - id
+        - name
+
+    Product:
+      type: object
+      description: Complete product information (actual structure depends on your Product model)
+      properties:
+        id:
+          type: integer
+          description: Product ID
+          example: 123
+        name:
+          type: string
+          description: Product name
+          example: "Wireless Headphones"
+        # Add other product properties based on your Product model
+        created_at:
+          type: string
+          format: date-time
+          description: Product creation timestamp
+          example: "2024-01-15T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Product last update timestamp
+          example: "2024-01-15T10:30:00Z"
+      required:
+        - id
+        - name
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Invalid request"
+        message:
+          type: string
+          description: Additional error details
+          example: "The request could not be processed"
+
+  responses:
+    UnauthorizedError:
+      description: Authentication required or token invalid/expired
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "[Authorization header] invalid or expired token"
+
+tags:
+  - name: Authentication
+    description: User authentication operations
+  - name: Products
+    description: Product management operations
+  - name: Information
+    description: API information and metadata
+
+security:
+  - BearerAuth: []
