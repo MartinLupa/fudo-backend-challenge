@@ -38,17 +38,17 @@ Cuba.define do
 
   on 'products' do
     on root, get do
-      ProductController.get_all_products
+      ProductsController.get_all(res)
     end
 
     on ':id' do |id|
       on get do
-        ProductController.get_product_by_id(id, res)
+        ProductsController.get_by_id(id, res)
       end
     end
 
     on post do
-      ProductController.create_product_async(req, res)
+      ProductsController.create_async(req, res)
     end
   end
 end

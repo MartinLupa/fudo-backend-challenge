@@ -1,7 +1,7 @@
 require './workers/products_processor_worker'
 
 class ProductsController
-  def self.get_all_products
+  def self.get_all(res)
     products = Product.all
 
     products_list = products.map do |product|
@@ -14,7 +14,7 @@ class ProductsController
     res.json({ products: products_list.empty? ? 'no products found' : products_list })
   end
 
-  def self.get_product_by_id(id, res)
+  def self.get_by_id(id, res)
     product = Product.first(id: id)
 
     unless product
@@ -22,11 +22,12 @@ class ProductsController
       res.json({ error: "product with id# #{id} not found" })
       return
     end
+
     res.status = 200
     res.json(product: product.values)
   end
 
-  def self.create_product_async(req, res)
+  def self.create_async(req, res)
     payload = JSON.parse(req.body.read)
 
     # Validate payload
@@ -39,7 +40,7 @@ class ProductsController
 
     product_name = payload['name']
 
-    ProductProcessorWorker.perform_async(product_name)
+    # ProductProcessorWorker.perform_async(product_name)
 
     res.status = 202
     res.json({ message: "#{product_name} creation started successfully." })
