@@ -10,9 +10,15 @@ require './middlewares/session_validator'
 require './app'
 
 app = Rack::Builder.new do
-  # use Rack::Etag            # Add an ETag
-  # use Rack::ConditionalGet  # Support Caching
-  # use Rack::Deflator        # GZip
+  use Rack::Deflater # Enables the Accept-Encoding header
+  use Rack::Static, {
+    root: '.',
+    urls: ['/authors', '/openapi.yaml'],
+    headers_rules: [
+      ['/AUTHORS', { 'cache-control' => 'public, max-age=86400' }],
+      ['/openapi.yaml', { 'cache-control' => 'no-cache, must-revalidate' }]
+    ]
+  }
   run Cuba
 end
 

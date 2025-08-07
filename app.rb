@@ -24,18 +24,6 @@ Cuba.define do
     end
   end
 
-  on 'openapi' do
-    on get do
-      handle_openapi
-    end
-  end
-
-  on 'authors' do
-    on get do
-      handle_authors
-    end
-  end
-
   on 'products' do
     on root, get do
       ProductsController.get_all(res)
