@@ -12,16 +12,3 @@ module Schemas
     additionalProperties: false
   }.freeze
 end
-
-# UPDATE_PRODUCT = {
-#   type: 'object',
-#   required: [], # No fields are required for updates, allowing partial updates
-#   properties: {
-#     name: {
-#       type: 'string',
-#       minimum: 3,
-#       maximum: 20
-#     }
-#   },
-#   additionalProperties: false
-# }.freeze
