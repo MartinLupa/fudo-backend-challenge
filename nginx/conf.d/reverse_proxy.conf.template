@@ -28,13 +28,17 @@ server {
     }
 
     location /api/authors {
-        try_files /AUTHORS $uri;
-        add_header Cache-Control "public, max-age=86400";
+        proxy_pass_header Cache-Control;
+        proxy_pass_header Expires;
+
+        proxy_pass http://products_api/authors;
     }
 
     location /api/openapi.yaml {
-        try_files /openapi.yaml $uri;
-        add_header Cache-Control "no-cache, must-revalidate";
+        proxy_pass_header Cache-Control;
+        proxy_pass_header Expires;
+        
+        proxy_pass http://products_api/openapi.yaml;
     }
 
     location /api/products {

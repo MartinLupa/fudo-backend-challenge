@@ -8,16 +8,7 @@ require 'dotenv/load'
 require './app'
 
 app = Rack::Builder.new do
-  use Rack::Deflater # Enables the Accept-Encoding header
-  use Rack::Static, {
-    root: '.',
-    urls: ['/authors', '/openapi.yaml'],
-    headers_rules: [
-      ['/AUTHORS', { 'cache-control' => 'public, max-age=86400' }],
-      ['/openapi.yaml', { 'cache-control' => 'no-cache, must-revalidate' }]
-    ]
-  }
-  # use Rack::Auth::Basic 'user', 'password'
+  use Rack::Deflater # Enables the Accept-Encoding header for gzip
   run Cuba
 end
 

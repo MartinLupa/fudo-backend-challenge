@@ -1,3 +1,4 @@
+# https://hub.docker.com/r/jsixc/ruby-rack-app/dockerfile
 FROM ruby:3.4.5
 
 # Install node for asset building

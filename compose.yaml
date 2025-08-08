@@ -30,14 +30,14 @@ services:
       - "6379:6379"
     command: ["redis-server", "--loglevel", "verbose"]
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on: [db]
-    environment: 
-      RACK_ENV: ${RACK_ENV}
-      SERVER_PORT: ${SERVER_PORT}
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   depends_on: [db]
+  #   environment: 
+  #     RACK_ENV: ${RACK_ENV}
+  #     SERVER_PORT: ${SERVER_PORT}
     
 volumes:
   postgres_data:
