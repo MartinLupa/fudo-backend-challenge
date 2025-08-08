@@ -8,6 +8,7 @@ unless DB.table_exists?(:products)
   end
 end
 
+# Represents a product in the system. Validates that the name attribute is present.
 class Product < Sequel::Model
   plugin :json_serializer
   plugin :validation_helpers

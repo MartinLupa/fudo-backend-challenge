@@ -17,6 +17,7 @@ require './controllers/products_controller'
 # Initialize services
 auth_service = AuthService.new
 
+# Initialize middlewares
 Cuba.use Rack::Deflater
 Cuba.use Rack::Static, {
   root: '.',
@@ -28,6 +29,7 @@ Cuba.use Rack::Static, {
 }
 Cuba.use Rack::Sendfile
 
+# App definition
 Cuba.define do
   on 'login' do
     on post do

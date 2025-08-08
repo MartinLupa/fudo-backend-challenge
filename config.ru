@@ -2,7 +2,6 @@
 
 require 'rackup'
 require 'dotenv/load'
-
 require './app'
 
 run Cuba

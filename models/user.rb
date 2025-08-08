@@ -8,6 +8,8 @@ unless DB.table_exists?(:users)
   end
 end
 
+# Represents a user in the system, with username and password attributes.
+# Validates that these attributes are present.
 class User < Sequel::Model
   plugin :json_serializer
   plugin :validation_helpers

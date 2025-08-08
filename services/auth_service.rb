@@ -1,5 +1,8 @@
 require 'securerandom'
 
+# Provides authentication services including user login, session validation,
+# and token generation. Manages password hashing and session handling
+# for user authentication workflows.
 class AuthService
   def login(username, password)
     user = User.find(username: username)
