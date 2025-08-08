@@ -132,12 +132,30 @@ graph TB
 > **Proxy endpoint**: `http://localhost:<nginx_port>/api`
 
 ### Authentication
-- `POST /api/login` - Login with username/password # username: admin / password: admin (these values are seed on db start for development)
+- `POST /api/login` - Login with username/password
+  
+  > [!IMPORTANT]  
+  > First login and retrieve a valid and active token
 
+  ```curl
+  curl -X POST -H "Content-Type: application/json" -d '{"username":"admin","password":"admin"}' http://localhost:80/api/login
+  ```
 ### Products
 - `GET /api/products` - List all products (requires auth)
+
+  ```curl
+  curl -X GET -H "Content-Type: application/json" -H "Authorization: your_token_here" http://localhost:80/api/products
+  ```
 - `GET /api/products/:id` - Get product by ID (requires auth)
+
+  ```curl
+  curl -X GET -H "Content-Type: application/json" -H "Authorization: your_token_here" http://localhost:80/api/products/1
+  ```
 - `POST /api/products` - Create product asynchronously (requires auth)
+
+  ```curl
+  curl -X POST -H "Content-Type: application/json" -H "Authorization: your_token_here" -d '{"name":"New product"}' http://localhost:80/api/products
+  ```
 
 ### Information
 - `GET /api/AUTHORS` - Get authors information
