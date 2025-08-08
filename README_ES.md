@@ -2,6 +2,8 @@
 
 Una API REST en Ruby construida con el framework Cuba para la gestión de productos, con autenticación y procesamiento asíncrono de trabajos con Sidekiq.
 
+Las respuestas a las preguntas del challenge se encuentran dentro de la carpeta `docs`: [aqui](docs)
+
 ## Funcionalidades
 
 - Autenticación de usuarios con tokens similares a JWT

@@ -2,6 +2,8 @@
 
 A Ruby-based REST API built with Cuba framework for managing products, with authentication, and Sidekiq for async job processing.
 
+Please find answers to the questions inside the `docs`folder: [here](docs)
+
 ## Features
 
 - User authentication with JWT-like tokens
