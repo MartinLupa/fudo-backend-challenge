@@ -1,7 +1,5 @@
 # Technical Challenge - Backend Developer Sr.
 
-gzip encoding : accept-encoding header through deflater middleware
-
 A Ruby-based REST API built with Cuba framework for managing products, with authentication, and Sidekiq for async job processing.
 
 ## Features
