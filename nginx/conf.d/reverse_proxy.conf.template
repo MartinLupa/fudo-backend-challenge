@@ -13,7 +13,6 @@ server {
     listen  [::]:${API_GATEWAY_PORT};
     server_name  localhost;
 
-    # Products API endpoint
     location /api/login {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -27,13 +26,6 @@ server {
         proxy_pass http://products_api/login;
     }
 
-    location /api/authors {
-        proxy_pass_header Cache-Control;
-        proxy_pass_header Expires;
-
-        proxy_pass http://products_api/authors;
-    }
-
     location /api/openapi.yaml {
         proxy_pass_header Cache-Control;
         proxy_pass_header Expires;
@@ -41,14 +33,18 @@ server {
         proxy_pass http://products_api/openapi.yaml;
     }
 
+    location /api/AUTHORS {
+        proxy_pass_header Cache-Control;
+        proxy_pass_header Expires;
+        
+        proxy_pass http://products_api/AUTHORS;
+    }
+
     location /api/products {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        limit_req zone=perip burst=20 nodelay;
-        limit_req_status 429;
 
         # Proxy settings
         proxy_pass http://products_api/products;

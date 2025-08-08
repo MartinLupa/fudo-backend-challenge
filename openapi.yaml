@@ -289,7 +289,7 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            message: "[Authorization header] invalid or expired token"
+            error: "invalid or expired token"
 
 tags:
   - name: Authentication
