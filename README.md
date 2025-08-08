@@ -134,8 +134,8 @@ graph TB
 ### Authentication
 - `POST /api/login` - Login with username/password
   
-  > [!IMPORTANT]  
-  > First login and retrieve a valid and active token
+> [!IMPORTANT]  
+> First login and retrieve a valid and active token (expires in 1hr).
 
   ```curl
   curl -X POST -H "Content-Type: application/json" -d '{"username":"admin","password":"admin"}' http://localhost:80/api/login
