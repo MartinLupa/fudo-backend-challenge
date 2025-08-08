@@ -17,6 +17,7 @@ gem 'sequel-seed'
 gem 'sidekiq'
 
 group :development do
+  gem 'foreman'
   gem 'rerun'
   gem 'rubocop'
 end

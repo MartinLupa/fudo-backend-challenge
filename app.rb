@@ -17,6 +17,17 @@ require './controllers/products_controller'
 # Initialize services
 auth_service = AuthService.new
 
+Cuba.use Rack::Deflater
+Cuba.use Rack::Static, {
+  root: '.',
+  urls: ['/AUTHORS', '/openapi.yaml'],
+  headers_rules: [
+    ['/AUTHORS', { 'Cache-Control' => 'public, max-age=86400' }],
+    ['/openapi.yaml', { 'Cache-Control' => 'no-cache, must-revalidate' }]
+  ]
+}
+Cuba.use Rack::Sendfile
+
 Cuba.define do
   on 'login' do
     on post do
