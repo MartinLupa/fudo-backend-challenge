@@ -1,15 +1,19 @@
-require './models/product'
+require './app/models/product'
 
 Sequel.seed(:development) do
   def run
     [
-      ['Pizza - Pepperoni'],
-      ['Pizza - Margherita'],
-      ['Not Pizza - Hawaian'],
-      ['Pizza - Vegetarian'],
-      ['Pizza - Bacon']
+      'Pizza - Pepperoni',
+      'Pizza - Margherita',
+      'Not Pizza - Hawaiian',
+      'Pizza - Vegetarian',
+      'Pizza - Bacon'
     ].each do |name|
-      Product.create name: name
+      begin
+        Product.find_or_create(name: name)
+      rescue Sequel::Error => e
+        puts "Error seeding database: #{e.message}"
+      end
     end
   end
 end

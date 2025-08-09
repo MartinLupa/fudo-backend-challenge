@@ -20,4 +20,5 @@ group :development do
   gem 'foreman'
   gem 'rerun'
   gem 'rubocop'
+  gem 'rake'
 end

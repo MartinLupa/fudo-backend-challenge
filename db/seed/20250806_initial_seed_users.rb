@@ -1,5 +1,5 @@
-require './models/user'
-require './services/auth_service'
+require './app/models/user'
+require './app/services/auth_service'
 
 Sequel.seed(:development) do
   def run
@@ -8,7 +8,11 @@ Sequel.seed(:development) do
       ['admin', auth_service.hash_password('admin')],
       ['user', auth_service.hash_password('user')]
     ].each do |username, password|
-      User.create username: username, password: password
+      begin
+        User.find_or_create(username: username, password: password)
+      rescue Sequel::Error => e
+        puts "Error seeding database: #{e.message}"
+      end
     end
   end
 end

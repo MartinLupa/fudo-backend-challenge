@@ -1,4 +1,4 @@
-require './workers/products_processor_worker'
+require './app/workers/products_processor_worker'
 
 # Handles HTTP requests for product-related operations, including retrieving all products,
 # fetching a product by ID, and creating products asynchronously with validation.

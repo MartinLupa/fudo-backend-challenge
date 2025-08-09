@@ -8,6 +8,6 @@ run Cuba
 
 Rackup::Server.start(
   app: Cuba,
-  Port: ENV['SERVER_PORT'],
+  Port: ENV['SERVER_PORT'] || 3000,
   environment: ENV['RACK_ENV'] || 'development'
 )

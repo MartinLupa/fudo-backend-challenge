@@ -1,2 +1,2 @@
 web: rerun rackup
-worker: bundle exec sidekiq -C ./config/sidekiq.yaml -r ./workers/products_processor_worker.rb
+worker: bundle exec sidekiq -C ./app/config/sidekiq.yaml -r ./app/workers/products_processor_worker.rb

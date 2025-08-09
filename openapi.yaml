@@ -6,7 +6,7 @@ info:
   contact:
     name: API Support
 servers:
-  - url: http://localhost:9292
+  - url: http://localhost:3000
     description: Development server
   - url: https://api.example.com
     description: Production server

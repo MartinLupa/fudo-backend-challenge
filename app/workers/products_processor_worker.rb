@@ -1,6 +1,5 @@
 require 'sidekiq'
-require './models/product'
-require './config/database'
+require './app/models/product'
 
 # Processes product creation asynchronously.
 class ProductProcessorWorker

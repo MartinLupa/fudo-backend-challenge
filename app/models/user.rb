@@ -1,5 +1,7 @@
+require './app/config/database'
 require 'sequel'
 
+# TODO: move table creation/migrations logic out of the app's logic
 unless DB.table_exists?(:users)
   DB.create_table :users do
     primary_key :id
