@@ -119,7 +119,7 @@ graph TB
 
 5. **Alternatively to steps 3 and 4, you can run all services and the API through Docker**
    ```bash
-   # Uncomment app definition in docker-compose.yml and run
+   # Uncomment app and sidekiq definitions in docker-compose.yml and run
    docker-compose up
    ```
 

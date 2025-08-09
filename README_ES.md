@@ -120,7 +120,7 @@ graph TB
 
 5. **Alternativamente a los pasos 3 y 4, podés correr todo con Docker**
    ```bash
-   # Descomentá la definición del servicio "app" en el docker-compose.yml y ejecutá:
+   # Descomentá la definición del servicio "app" y "sidekiq" en el docker-compose.yml y ejecutá:
    docker-compose up
    ```
 
