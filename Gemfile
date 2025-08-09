@@ -15,6 +15,7 @@ gem 'retriable'
 gem 'sequel'
 gem 'sequel-seed'
 gem 'sidekiq'
+gem 'rack-cors'
 
 group :development do
   gem 'foreman'

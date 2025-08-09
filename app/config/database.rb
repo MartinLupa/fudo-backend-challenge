@@ -4,6 +4,7 @@ require 'dotenv/load'
 require 'sequel/extensions/seed'
 
 database_url = ENV['DATABASE_URL']
+
 raise '[Missing environment variable] DATABASE_URL' if database_url.nil? || database_url.empty?
 
 Retriable.retriable(on: Sequel::DatabaseConnectionError, tries: 3, intervals: 2) do

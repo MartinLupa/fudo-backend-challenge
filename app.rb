@@ -1,6 +1,7 @@
 require 'json'
 require 'json-schema'
 require 'cuba'
+require 'rack/cors'
 
 require './app/config/database'
 require './app/models/user'
@@ -16,13 +17,20 @@ require './app/controllers/products_controller'
 auth_service = AuthService.new
 
 # Initialize middlewares
+Cuba.use Rack::Cors do
+  allow do
+    origins '*'
+    resource '*', :headers => :any, :methods => [:get, :post, :options]
+  end
+end
 Cuba.use Rack::Deflater
 Cuba.use Rack::Static, {
   root: '.',
-  urls: ['/AUTHORS', '/openapi.yaml'],
+  urls: ['/AUTHORS', '/openapi.yaml', '/README.md'],
   headers_rules: [
     ['/AUTHORS', { 'Cache-Control' => 'public, max-age=86400' }],
-    ['/openapi.yaml', { 'Cache-Control' => 'no-cache, must-revalidate' }]
+    ['/openapi.yaml', { 'Cache-Control' => 'no-cache, must-revalidate' }],
+    ['/README.md', { 'Cache-Control' => 'no-cache, must-revalidate' }]
   ]
 }
 Cuba.use Rack::Sendfile

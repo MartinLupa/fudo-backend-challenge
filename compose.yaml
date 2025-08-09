@@ -34,23 +34,22 @@ services:
     ports:
       - "6379:6379"
     command: [ "redis-server", "--loglevel", "verbose" ]
-
   # TODO: split Dockerfiles for app and sidekiq processes
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: bundle exec rackup
-    depends_on: [ nginx, db ]
-    ports:
-      - "${SERVER_PORT}:3000"
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   command: bundle exec rackup
+  #   depends_on: [ nginx, db ]
+  #   ports:
+  #     - "${SERVER_PORT}:3000"
 
-  sidekiq:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on: [ db, redis, app ]
-    command: bundle exec sidekiq -C ./app/config/sidekiq.yaml -r ./app/workers/products_processor_worker.rb
+  # sidekiq:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   depends_on: [ db, redis, app ]
+  #   command: bundle exec sidekiq -C ./app/config/sidekiq.yaml -r ./app/workers/products_processor_worker.rb
 
 volumes:
   postgres_data:

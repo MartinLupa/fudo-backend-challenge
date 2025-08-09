@@ -7,9 +7,10 @@ info:
     name: API Support
 servers:
   - url: http://localhost:3000
-    description: Development server
-  - url: https://api.example.com
-    description: Production server
+    description: App server
+  - url: http://localhost:80/api
+    description: Nginx web server (Proxy)
+
 
 paths:
   /login:
@@ -80,7 +81,7 @@ paths:
       tags:
         - Products
       security:
-        - BearerAuth: []
+        - ApiKeyAuth: []
       responses:
         '200':
           description: List of products retrieved successfully
@@ -106,7 +107,7 @@ paths:
       tags:
         - Products
       security:
-        - BearerAuth: []
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -148,7 +149,7 @@ paths:
       tags:
         - Products
       security:
-        - BearerAuth: []
+        - ApiKeyAuth: []
       parameters:
         - name: id
           in: path
@@ -178,7 +179,7 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
-  /authors:
+  /AUTHORS:
     get:
       summary: Get authors information
       description: Retrieve authors information from the AUTHORS file
@@ -198,7 +199,7 @@ paths:
                     description: Content of the AUTHORS file
                     example: "John Doe <john@example.com>\nJane Smith <jane@example.com>"
 
-  /openapi:
+  /openapi.yaml:
     get:
       summary: Get OpenAPI specification
       description: Retrieve the OpenAPI specification for this API
@@ -220,11 +221,10 @@ paths:
 
 components:
   securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: Authentication token obtained from the /login endpoint
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
 
   schemas:
     ProductSummary:
@@ -254,17 +254,6 @@ components:
           type: string
           description: Product name
           example: "Wireless Headphones"
-        # Add other product properties based on your Product model
-        created_at:
-          type: string
-          format: date-time
-          description: Product creation timestamp
-          example: "2024-01-15T10:30:00Z"
-        updated_at:
-          type: string
-          format: date-time
-          description: Product last update timestamp
-          example: "2024-01-15T10:30:00Z"
       required:
         - id
         - name
@@ -300,4 +289,4 @@ tags:
     description: API information and metadata
 
 security:
-  - BearerAuth: []
+  - ApiKeyAuth: []
