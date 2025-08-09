@@ -1,21 +1,25 @@
-require 'securerandom'
+class AuthController < ApplicationController
+  def login(req, res)
+    payload = parse_and_validate(req, res, Schemas::LOGIN_ATTEMPT)
+  
+    username, password = payload.values_at('username', 'password')
 
-# Provides authentication services including user login, session validation,
-# and token generation. Manages password hashing and session handling
-# for user authentication workflows.
-class AuthService
-  def login(username, password)
     user = User.find(username: username)
-
     return nil unless user && validate_password(user.password, password)
 
     token = generate_token
 
-    Session.update_or_create({ username: username },
+    if token
+      Session.update_or_create({ username: username },
                              session_token: token[:value],
                              username: username,
                              expires_at: token[:expires_at])
-    token
+      res.status = 200
+      res.json({ token: token[:value], expires_at: token[:expires_at] })
+    else
+      res.status = 401
+      res.json({ error: 'invalid credentials' })
+    end
   end
 
   def generate_token

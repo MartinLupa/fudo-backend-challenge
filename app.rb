@@ -4,23 +4,27 @@ require 'cuba'
 require 'rack/cors'
 
 require './app/config/database'
+
+require './app/controllers/app_controller'
+require './app/controllers/auth_controller'
+require './app/controllers/products_controller'
+
 require './app/models/user'
 require './app/models/session'
 require './app/models/product'
-require './app/routes/login/handle_login'
+
 require './app/schemas/user'
 require './app/schemas/product'
-require './app/services/auth_service'
-require './app/controllers/products_controller'
 
-# Initialize services
-auth_service = AuthService.new
+# Controllers
+auth_controller = AuthController.new
+products_controller = ProductsController.new
 
-# Initialize middlewares
+# Middlewares
 Cuba.use Rack::Cors do
   allow do
     origins '*'
-    resource '*', :headers => :any, :methods => [:get, :post, :options]
+    resource '*', headers: :any, methods: %i[get post options]
   end
 end
 Cuba.use Rack::Deflater
@@ -29,36 +33,35 @@ Cuba.use Rack::Static, {
   urls: ['/AUTHORS', '/openapi.yaml', '/README.md'],
   headers_rules: [
     ['/AUTHORS', { 'Cache-Control' => 'public, max-age=86400' }],
-    ['/openapi.yaml', { 'Cache-Control' => 'no-cache, must-revalidate' }],
-    ['/README.md', { 'Cache-Control' => 'no-cache, must-revalidate' }]
+    ['/openapi.yaml', { 'Cache-Control' => 'no-cache, must-revalidate' }]
   ]
 }
 Cuba.use Rack::Sendfile
 
-# App definition
+# Routes
 Cuba.define do
   on 'login' do
     on post do
-      handle_login(req, res, auth_service)
+      auth_controller.login(req, res)
     end
   end
 
   on 'products' do
-    valid_session = auth_service.validate_session(req.get_header('HTTP_AUTHORIZATION'))
+    valid_session = auth_controller.validate_session(req.get_header('HTTP_AUTHORIZATION'))
 
     if valid_session
       on root, get do
-        ProductsController.get_all(res)
+        products_controller.get_all(res)
       end
 
       on ':id' do |id|
         on get do
-          ProductsController.get_by_id(id, res)
+          products_controller.get_by_id(id, res)
         end
       end
 
       on post do
-        ProductsController.create_async(req, res)
+        products_controller.create_async(req, res)
       end
     else
       res.status = 401
@@ -66,3 +69,6 @@ Cuba.define do
     end
   end
 end
+
+
+

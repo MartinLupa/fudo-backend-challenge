@@ -2,43 +2,29 @@ require './app/workers/products_processor_worker'
 
 # Handles HTTP requests for product-related operations, including retrieving all products,
 # fetching a product by ID, and creating products asynchronously with validation.
-class ProductsController
-  def self.get_all(res)
+class ProductsController < ApplicationController
+  def get_all(res)
     products = Product.all
 
-    products_list = products.map do |product|
-      {
-        id: product.id,
-        name: product.name
-      }
+    products_list = products.map do
+      |p| { id: p.id, name: p.name }
     end
 
     res.json({ products: products_list.empty? ? 'no products found' : products_list })
   end
 
-  def self.get_by_id(id, res)
+  def get_by_id(id, res)
     product = Product.first(id: id)
 
-    unless product
-      res.status = 404
-      res.json({ error: "product with id# #{id} not found" })
-      return
-    end
+    return render_not_found("product", "id", id, res) unless product
 
     res.status = 200
     res.json(product: product.values)
   end
 
-  def self.create_async(req, res)
-    payload = JSON.parse(req.body.read)
-
-    # Validate payload
-    begin
-      JSON::Validator.validate!(Schemas::CREATE_PRODUCT, payload)
-    rescue JSON::Schema::ValidationError => e
-      res.status = 400
-      res.json({ error: e.message })
-    end
+  def create_async(req, res)
+    payload = parse_and_validate(req, res, Schemas::CREATE_PRODUCT)
+    return unless payload
 
     product_name = payload['name']
 

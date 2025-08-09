@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Cuba Products API
+  title: Products API
   description: A Ruby Cuba-based API for managing products with authentication
   version: 1.0.0
   contact:
