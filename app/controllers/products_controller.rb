@@ -12,6 +12,7 @@ require './app/workers/products_processor_worker'
 # - get_all(res): Returns all products or a message if none are found.
 # - get_by_id(id, res): Returns a specific product by ID or a not found error.
 # - create_async(req, res): Validates and enqueues a product creation job to be processed after a delay.
+# - job_status(req, res, job_id): Returns the status for a specific job_id.
 #
 class ProductsController < ApplicationController
   def get_all(res)
