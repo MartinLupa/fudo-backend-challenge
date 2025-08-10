@@ -30,7 +30,7 @@ end
 Cuba.use Rack::Deflater
 Cuba.use Rack::Static, {
   root: '.',
-  urls: ['/AUTHORS', '/openapi.yaml', '/README.md'],
+  urls: ['/AUTHORS', '/openapi.yaml'],
   headers_rules: [
     ['/AUTHORS', { 'Cache-Control' => 'public, max-age=86400' }],
     ['/openapi.yaml', { 'Cache-Control' => 'no-cache, must-revalidate' }]

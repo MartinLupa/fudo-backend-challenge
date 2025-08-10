@@ -120,17 +120,21 @@ graph TB
    docker-compose up
    ```
 
-4. **Levantar la API**
+4. **Alternativamente, se pueden inicializar los servicios y la API independientemente**
+   ```bash
+   # Comenta la definición de los servicios "app" y "sidekiq" en el docker-compose.yml y ejecutá:
+   docker-compose up
+   ```
+
+   Esto va a levantar unicamente PostgresQL, Redis, y Nginx. Y luego podes ejecutar la API y Sidekiq en una terminal independiente mediante el siguiente comando:
+
    ```bash
    bundle install
    foreman start
    ```
 
-5. **Alternativamente a los pasos 3 y 4, podés correr todo con Docker**
-   ```bash
-   # Descomentá la definición del servicio "app" y "sidekiq" en el docker-compose.yml y ejecutá:
-   docker-compose up
-   ```
+   Esto capitaliza el uso del hot reload de `rerun` para detectar cambios en el codigo.
+   
 
 ## Endpoints de la API
 

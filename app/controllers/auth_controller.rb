@@ -1,24 +1,25 @@
 class AuthController < ApplicationController
   def login(req, res)
     payload = parse_and_validate(req, res, Schemas::LOGIN_ATTEMPT)
-  
-    username, password = payload.values_at('username', 'password')
 
+    username, password = payload.values_at('username', 'password')
+  
     user = User.find(username: username)
-    return nil unless user && validate_password(user.password, password)
+    if !user || !validate_password(user.password, password)      
+      unauthorized(res)
+      return
+    end
 
     token = generate_token
 
     if token
       Session.update_or_create({ username: username },
-                             session_token: token[:value],
-                             username: username,
-                             expires_at: token[:expires_at])
+                               session_token: token[:value],
+                               expires_at: token[:expires_at])
       res.status = 200
       res.json({ token: token[:value], expires_at: token[:expires_at] })
     else
-      res.status = 401
-      res.json({ error: 'invalid credentials' })
+      unauthorized(res)
     end
   end
 
@@ -42,5 +43,10 @@ class AuthController < ApplicationController
     return nil if session.nil? || session[:expires_at] <= Time.now
 
     session
+  end
+
+  def unauthorized(res)
+    res.status = 401
+    res.json({ error: 'invalid credentials' })
   end
 end

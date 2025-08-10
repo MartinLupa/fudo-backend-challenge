@@ -111,16 +111,23 @@ graph TB
    ```bash
    docker-compose up
    ```
-4. **Run the API**
+4. **Alternatively, you can start the services and the API independently**
    ```bash
-   bundle install
-   foreman start
+   # Comment out the definitions of the "app" and "sidekiq" services in docker-compose.yml and run:
+   docker-compose up
    ```
 
 5. **Alternatively to steps 3 and 4, you can run all services and the API through Docker**
    ```bash
    # Uncomment app and sidekiq definitions in docker-compose.yml and run
    docker-compose up
+   ```
+
+   This will only start PostgreSQL, Redis, and Nginx. Then you can run the API and Sidekiq in a separate terminal using the following command:
+
+   ```bash
+   bundle install
+   foreman start
    ```
 
 ## API Endpoints

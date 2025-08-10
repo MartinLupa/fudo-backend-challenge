@@ -25,12 +25,3 @@ end
 
 # Enable update_or_create method (used to refresh session tokens)
 Sequel::Model.plugin :update_or_create
-
-# TODO: ideally seeding and migrations for dev should be out of the app logic
-if ENV['RACK_ENV'] == 'development'
-  Sequel::Migrator.run(DB, './db/migrations')
-
-  Sequel::Seed.setup(:development)
-  Sequel.extension :seed
-  Sequel::Seeder.apply(DB, './db/seed')    
-end
