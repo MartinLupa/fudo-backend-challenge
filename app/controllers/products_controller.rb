@@ -1,7 +1,18 @@
 require './app/workers/products_processor_worker'
 
-# Handles HTTP requests for product-related operations, including retrieving all products,
-# fetching a product by ID, and creating products asynchronously with validation.
+##
+# ProductsController handles HTTP requests related to product management.
+#
+# Responsibilities:
+# - Retrieves all products in a simplified list format.
+# - Fetches a single product by its ID.
+# - Validates and queues product creation jobs for asynchronous processing.
+#
+# Endpoints:
+# - get_all(res): Returns all products or a message if none are found.
+# - get_by_id(id, res): Returns a specific product by ID or a not found error.
+# - create_async(req, res): Validates and enqueues a product creation job to be processed after a delay.
+#
 class ProductsController < ApplicationController
   def get_all(res)
     products = Product.all

@@ -1,3 +1,15 @@
+##
+# AuthController handles user authentication and session management.
+# 
+# Responsibilities:
+# - Validates login requests against the LOGIN_ATTEMPT schema.
+# - Authenticates users by verifying their hashed passwords.
+# - Generates secure session tokens with expiration.
+# - Creates or updates user sessions in the database.
+# - Provides helper methods for hashing passwords, validating sessions, and responding with errors.
+#
+# Endpoints:
+# - login(req, res): Authenticates a user and returns a session token if credentials are valid.
 class AuthController < ApplicationController
   def login(req, res)
     payload = parse_and_validate(req, res, Schemas::LOGIN_ATTEMPT)
