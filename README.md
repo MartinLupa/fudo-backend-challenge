@@ -139,9 +139,10 @@ graph TB
 ## Endpoints de la API
 
 > [!NOTE]  
-> Si accedés a través del puerto del API Gateway, agregá `/api/` a todos los endpoints después del puerto.
+> Si accedés a través del puerto del proxy, agregá `/api/` a todos los endpoints después del puerto.
 >
 > **Endpoint base**: `http://localhost:<puerto_app>/`> 
+>
 > **Endpoint vía proxy**: `http://localhost:<puerto_nginx>/api`
 
 ### Autenticación
