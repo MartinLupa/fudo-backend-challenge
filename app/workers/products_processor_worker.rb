@@ -12,7 +12,7 @@ class ProductProcessorWorker
 
     redis.set("job:#{jid}:status", "working")
     Product.create(name: product_name)
-    sleep(10)
+    # sleep(15) #Enable this line to give you time to test the status/job_id endpoint
     redis.set("job:#{jid}:status", "complete")
 
   rescue => e
