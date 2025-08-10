@@ -34,6 +34,7 @@ services:
     ports:
       - "6379:6379"
     command: [ "redis-server", "--loglevel", "verbose" ]
+  #
   # TODO: split Dockerfiles for app and sidekiq processes
   # app:
   #   build:

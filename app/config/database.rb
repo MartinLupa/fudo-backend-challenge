@@ -2,6 +2,7 @@ require 'sequel'
 require 'retriable'
 require 'dotenv/load'
 require 'sequel/extensions/seed'
+require 'sequel/extensions/migration'
 
 database_url = ENV['DATABASE_URL']
 
@@ -22,13 +23,13 @@ rescue Sequel::DatabaseConnectionError => e
   raise e
 end
 
-# Enable update_or_create method
+# Enable update_or_create method (used to refresh session tokens)
 Sequel::Model.plugin :update_or_create
 
 # TODO: ideally seeding and migrations for dev should be out of the app logic
-# Apply initial seeds if development
 if ENV['RACK_ENV'] == 'development'
-  # Run seed scripts
+  Sequel::Migrator.run(DB, './db/migrations')
+
   Sequel::Seed.setup(:development)
   Sequel.extension :seed
   Sequel::Seeder.apply(DB, './db/seed')    

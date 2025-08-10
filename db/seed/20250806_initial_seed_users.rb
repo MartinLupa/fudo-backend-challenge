@@ -1,12 +1,12 @@
 require './app/models/user'
-require './app/services/auth_service'
+require './app/controllers/auth_controller'
 
 Sequel.seed(:development) do
   def run
-    auth_service = AuthService.new
+    auth_controller = AuthController.new
     [
-      ['admin', auth_service.hash_password('admin')],
-      ['user', auth_service.hash_password('user')]
+      ['admin', auth_controller.hash_password('admin')],
+      ['user', auth_controller.hash_password('user')]
     ].each do |username, password|
       begin
         User.find_or_create(username: username, password: password)
