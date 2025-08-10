@@ -49,8 +49,6 @@ class ProductsController < ApplicationController
 
     job_id = ProductProcessorWorker.perform_in(5, product_name)
 
-    puts "@job_id: #{job_id}"
-
     res.status = 202
     res.json({ message: "#{product_name} creation will start in 5 seconds.", job_id: job_id })
   end
@@ -59,8 +57,6 @@ class ProductsController < ApplicationController
     redis = Redis.new
 
     status = redis.get("job:#{job_id}:status")
-
-    puts "@status: #{status}"
 
     res.json(status: status || "unknown")
   end
