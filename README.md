@@ -15,7 +15,7 @@ Las respuestas a las preguntas del challenge se encuentran dentro de la carpeta 
 - Documentación compatible con OpenAPI
 
 ## Diagramas
-> [!NOTA]  
+> [!NOTE]  
 > Para visualizar los diagramas localmente, se requiere la extensión Mermaid (`vstirbu.vscode-mermaid-preview`).
 
 ### Arquitectura de la App
@@ -138,7 +138,7 @@ graph TB
 
 ## Endpoints de la API
 
-> [!NOTA]  
+> [!NOTE]  
 > Si accedés a través del puerto del API Gateway, agregá `/api/` a todos los endpoints después del puerto.
 >
 > **Endpoint base**: `http://localhost:<puerto_app>/`> 
@@ -147,7 +147,7 @@ graph TB
 ### Autenticación
 - `POST /api/login` - Iniciar sesión con usuario y contraseña
 
-> [!IMPORTANTE]  
+> [!IMPORTANT]  
 > Primero iniciá sesión para obtener un token válido y activo (expira en 1 hora).
 
   ```bash
