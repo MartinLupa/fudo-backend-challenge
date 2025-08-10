@@ -16,6 +16,7 @@ gem 'sequel'
 gem 'sequel-seed'
 gem 'sidekiq'
 gem 'rack-cors'
+gem 'redis'
 
 group :development do
   gem 'foreman'

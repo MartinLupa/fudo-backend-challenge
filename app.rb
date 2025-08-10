@@ -54,6 +54,10 @@ Cuba.define do
         products_controller.get_all(res)
       end
 
+      on get, 'status/:job_id' do |job_id|
+        products_controller.job_status(req, res, job_id)
+      end
+
       on ':id' do |id|
         on get do
           products_controller.get_by_id(id, res)

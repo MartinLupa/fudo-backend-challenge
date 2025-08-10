@@ -33,12 +33,12 @@ paths:
                 username:
                   type: string
                   description: User's username
-                  example: "john_doe"
+                  example: "admin"
                 password:
                   type: string
                   format: password
                   description: User's password
-                  example: "secure_password123"
+                  example: "admin"
       responses:
         '200':
           description: Login successful
@@ -120,7 +120,7 @@ paths:
                 name:
                   type: string
                   description: Product name
-                  example: "Wireless Headphones"
+                  example: "Hamburger"
       responses:
         '202':
           description: Product creation accepted and will be processed
@@ -131,7 +131,11 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Wireless Headphones creation will start in 5 seconds."
+                    example: "Hamburger creation will start in 5 seconds."
+                  job_id:
+                    type: string
+                    description: The ID of the background job processing the product creation
+                    example: "3a6f2c5d8e12"
         '400':
           description: Invalid request payload
           content:
@@ -157,7 +161,7 @@ paths:
           description: Product ID
           schema:
             type: integer
-            example: 123
+            example: 1
       responses:
         '200':
           description: Product retrieved successfully
@@ -179,6 +183,38 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
+  /products/status/{job_id}:
+    get:
+      summary: Get job status
+      description: Retrieve the status of an asynchronous product creation job by its job ID.
+      operationId: getProductJobStatus
+      tags:
+        - Products
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          description: The Sidekiq job ID returned when creating the product asynchronously.
+          schema:
+            type: string
+            example: "3a6f2c5d8e12"
+      responses:
+        '200':
+          description: Job status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Current job status
+                    example: "working"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
   /AUTHORS:
     get:
       summary: Get authors information
@@ -190,14 +226,10 @@ paths:
         '200':
           description: Authors information retrieved successfully
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                properties:
-                  authors:
-                    type: string
-                    description: Content of the AUTHORS file
-                    example: "John Doe <john@example.com>\nJane Smith <jane@example.com>"
+                type: string
+                example: "Martin I. Lupa"
 
   /openapi.yaml:
     get:
@@ -210,14 +242,10 @@ paths:
         '200':
           description: OpenAPI specification retrieved successfully
           content:
-            application/json:
+            application/yaml:
               schema:
-                type: object
-                properties:
-                  openapi_spec:
-                    type: string
-                    description: Content of the openapi.yaml file
-                    example: "openapi: 3.0.3\ninfo:\n  title: Cuba Products API..."
+                type: string
+                example: "openapi: 3.0.3\ninfo:\n  title: Cuba Products API..."
 
 components:
   securitySchemes:
@@ -237,7 +265,7 @@ components:
         name:
           type: string
           description: Product name
-          example: "Wireless Headphones"
+          example: "Hamburger"
       required:
         - id
         - name
@@ -253,7 +281,7 @@ components:
         name:
           type: string
           description: Product name
-          example: "Wireless Headphones"
+          example: "Hamburger"
       required:
         - id
         - name

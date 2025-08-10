@@ -155,21 +155,26 @@ graph TB
   curl -X POST -H "Content-Type: application/json" -d '{"username":"admin","password":"admin"}' http://localhost:80/api/login
   ```
 
-### Productos
-- `GET /api/products` - Listar todos los productos (requiere autenticación)
+### Productos (requiren autenticación)
+- `GET /api/products` - Listar todos los productos
 
   ```bash
   curl -X GET -H "Content-Type: application/json" -H "Authorization: tu_token_aquí" http://localhost:80/api/products
   ```
-- `GET /api/products/:id` - Obtener producto por ID (requiere autenticación)
+- `GET /api/products/:id` - Obtener producto por ID
 
   ```bash
   curl -X GET -H "Content-Type: application/json" -H "Authorization: tu_token_aquí" http://localhost:80/api/products/1
   ```
-- `POST /api/products` - Crear producto de forma asíncrona (requiere autenticación)
+- `POST /api/products` - Crear producto de forma asíncrona
 
   ```bash
   curl -X POST -H "Content-Type: application/json" -H "Authorization: tu_token_aquí" -d '{"name":"Nuevo producto"}' http://localhost:80/api/products
+  ```
+
+- `GET /api/products/status/job_id` - Obtener el estado de un trabajo asíncrono de creación de producto por su job_id.
+  ```bash
+  curl -X GET -H "Content-Type: application/json" -H "Authorization: tu_token_aquí" http://localhost:80/api/products/status/<job_id>
   ```
 
 ### Información
