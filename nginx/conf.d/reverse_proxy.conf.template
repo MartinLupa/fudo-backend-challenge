@@ -13,6 +13,11 @@ server {
     listen  [::]:${API_GATEWAY_PORT};
     server_name  localhost;
 
+    location ~ /files/(.*) {
+        internal;
+        alias /var/www/$1;
+    }
+
     location /api/login {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -27,15 +32,19 @@ server {
     }
 
     location /api/openapi.yaml {
-        proxy_pass_header Cache-Control;
-        proxy_pass_header Expires;
+        proxy_pass_header  Cache-Control;
+        proxy_pass_header  Expires;
+        proxy_set_header   x-sendfile-type     x-accel-redirect;
+        proxy_set_header   x-accel-mapping     /var/www/=/files/;
         
         proxy_pass http://products_api/openapi.yaml;
     }
 
     location /api/AUTHORS {
-        proxy_pass_header Cache-Control;
-        proxy_pass_header Expires;
+        proxy_pass_header  Cache-Control;
+        proxy_pass_header  Expires;
+        proxy_set_header   x-sendfile-type     x-accel-redirect;
+        proxy_set_header   x-accel-mapping     /var/www/=/files/;
         
         proxy_pass http://products_api/AUTHORS;
     }
