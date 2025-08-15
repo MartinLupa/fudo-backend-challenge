@@ -9,6 +9,8 @@ require './app/controllers/app_controller'
 require './app/controllers/auth_controller'
 require './app/controllers/products_controller'
 
+require './app/middlewares/auth_middleware'
+
 require './app/models/user'
 require './app/models/session'
 require './app/models/product'
@@ -21,6 +23,7 @@ auth_controller = AuthController.new
 products_controller = ProductsController.new
 
 # Middlewares
+Cuba.use AuthMiddleware
 Cuba.use Rack::Cors do
   allow do
     origins '*'
@@ -47,32 +50,24 @@ Cuba.define do
   end
 
   on 'products' do
-    valid_session = auth_controller.validate_session(req.get_header('HTTP_AUTHORIZATION'))
+    on root, get do
+      products_controller.get_all(res)
+    end
 
-    if valid_session
-      on root, get do
-        products_controller.get_all(res)
-      end
-
-      on get, 'status/:job_id' do |job_id|
+    on 'status/:job_id' do |job_id|
+      on get do
         products_controller.job_status(req, res, job_id)
       end
+    end
 
-      on ':id' do |id|
-        on get do
-          products_controller.get_by_id(id, res)
-        end
+    on ':id' do |id|
+      on get do
+        products_controller.get_by_id(id, res)
       end
+    end
 
-      on post do
-        products_controller.create_async(req, res)
-      end
-    else
-      res.status = 401
-      res.json({ error: 'invalid or expired token' })
+    on post do
+      products_controller.create_async(req, res)
     end
   end
 end
-
-
-
