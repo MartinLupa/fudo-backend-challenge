@@ -11,7 +11,7 @@ class AuthMiddleware
       token = req.get_header('HTTP_AUTHORIZATION')
 
       if token.nil? || !@auth_controller.validate_session(token)
-        return [401, { 'content-type' => 'application/json' }, [{ error: 'unauthorized from middleware' }.to_json]]
+        return [401, { 'content-type' => 'application/json' }, [{ error: 'unauthorized' }.to_json]]
       end
     end
 
