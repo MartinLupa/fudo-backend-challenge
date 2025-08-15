@@ -1,6 +1,6 @@
 ##
 # AuthController handles user authentication and session management.
-# 
+#
 # Responsibilities:
 # - Validates login requests against the LOGIN_ATTEMPT schema.
 # - Authenticates users by verifying their hashed passwords.
@@ -15,9 +15,9 @@ class AuthController < ApplicationController
     payload = parse_and_validate(req, res, Schemas::LOGIN_ATTEMPT)
 
     username, password = payload.values_at('username', 'password')
-  
+
     user = User.find(username: username)
-    if !user || !validate_password(user.password, password)      
+    if !user || !validate_password(user.password, password)
       unauthorized(res)
       return
     end
