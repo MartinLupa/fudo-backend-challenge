@@ -56,7 +56,7 @@ Cuba.define do
 
     on 'status/:job_id' do |job_id|
       on get do
-        products_controller.job_status(req, res, job_id)
+        products_controller.job_status(res, job_id)
       end
     end
 

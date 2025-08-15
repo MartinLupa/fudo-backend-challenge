@@ -15,11 +15,16 @@ require './app/workers/products_processor_worker'
 # - job_status(req, res, job_id): Returns the status for a specific job_id.
 #
 class ProductsController < ApplicationController
+  def initialize
+    super
+    @redis = Redis.new
+  end
+
   def get_all(res)
     products = Product.all
 
-    products_list = products.map do
-      |p| { id: p.id, name: p.name }
+    products_list = products.map do |p|
+      { id: p.id, name: p.name }
     end
 
     res.json({ products: products_list.empty? ? 'no products found' : products_list })
@@ -28,7 +33,7 @@ class ProductsController < ApplicationController
   def get_by_id(id, res)
     product = Product.first(id: id)
 
-    return render_not_found("product", "id", id, res) unless product
+    return render_not_found('product', 'id', id, res) unless product
 
     res.status = 200
     res.json(product: product.values)
@@ -36,10 +41,10 @@ class ProductsController < ApplicationController
 
   def create_async(req, res)
     payload = parse_and_validate(req, res, Schemas::CREATE_PRODUCT)
+
     return unless payload
 
     product_name = payload['name']
-
     existing_product = Product.find(name: product_name)
 
     if existing_product
@@ -54,11 +59,9 @@ class ProductsController < ApplicationController
     res.json({ message: "#{product_name} creation will start in 5 seconds.", job_id: job_id })
   end
 
-  def job_status(req, res, job_id)
-    redis = Redis.new
+  def job_status(res, job_id)
+    status = @redis.get("job:#{job_id}:status")
 
-    status = redis.get("job:#{job_id}:status")
-
-    res.json(status: status || "unknown")
+    res.json(status: status || 'unknown')
   end
 end
