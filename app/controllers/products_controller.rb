@@ -56,7 +56,7 @@ class ProductsController < ApplicationController
     job_id = ProductProcessorWorker.perform_in(5, product_name)
 
     res.status = 202
-    res.headers['Location'] = "/products/status/#{job_id}"
+    res.headers['location'] = "api/products/status/#{job_id}"
     res.json({ message: "#{product_name} creation will start in 5 seconds.", job_id: job_id })
   end
 
