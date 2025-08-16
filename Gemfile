@@ -23,3 +23,10 @@ group :development do
   gem 'rerun'
   gem 'rubocop'
 end
+
+group :test do
+  gem 'database_cleaner-sequel'
+  gem 'factory_bot'
+  gem 'rack-test'
+  gem 'rspec'
+end
